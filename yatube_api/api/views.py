@@ -4,13 +4,16 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, mixins, filters
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from posts.models import Group, Post, Follow
-from api.permissions import IsAuthorOrReadOnly
 from api.pagination import CustomPagination
+from api.permissions import IsAuthorOrReadOnly
 from api.serializers import (CommentSerializer,
                              GroupSerializer,
                              PostSerializer,
                              FollowSerializer)
+
+from posts.models import Group, Post, Follow
+
+SUB_TO_SELF = 'Подписка на самого себя!'
 
 
 class CreateListViewSet(
@@ -57,6 +60,9 @@ class FollowViewSet(CreateListViewSet):
 
     def get_queryset(self):
         return self.request.user.follower.all()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class GroupViewSet(ListRetrieveViewSet):

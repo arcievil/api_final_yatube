@@ -1,5 +1,6 @@
 from rest_framework import serializers, validators
 from rest_framework.exceptions import ValidationError
+
 from posts.models import Comment, Post, Group, Follow, User
 
 GET_FOLLOWING = 'Нельзя подписаться на самого себя'
